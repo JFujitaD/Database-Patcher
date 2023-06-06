@@ -31,6 +31,12 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void removeTable(DatabaseTable table) {
+    setState(() {
+      tables.remove(table);
+    });
+  }
+
   void addColumn(DatabaseTable table) {
     setState(() {
       table.columns.add(DatabaseColumn());
@@ -83,6 +89,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   FloatingActionButton buildFloatingActionButton() => FloatingActionButton(
+    elevation: 5.0,
     onPressed: () {
       var response = ScriptGenerator.tryGenerateScript(tables);
       if (response == '') {
@@ -162,13 +169,26 @@ class _HomePageState extends State<HomePage> {
     ).toList();
 
     tileChildren.add(const SizedBox(height: Constants.spacingVertical,));
-    tileChildren.add(Card(
-      child: IconButton(
-        onPressed: () {
-          addColumn(databaseTable);
-        },
-        icon: Constants.addColumnIcon)
-    ));
+    tileChildren.add(Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        IconButton(
+          onPressed: () {
+            addColumn(databaseTable);
+          },
+          icon: Constants.addColumnIcon,
+        ),
+        const SizedBox(width: Constants.spacingHorizontal),
+        IconButton(
+          onPressed: () {
+            removeTable(databaseTable);
+          },
+          icon: Constants.removeTableIcon,
+        ),
+        const SizedBox(width: Constants.spacingHorizontal),
+      ],
+    )
+    );
     tileChildren.add(const SizedBox(height: Constants.spacingVertical,));
 
     return tileChildren;
