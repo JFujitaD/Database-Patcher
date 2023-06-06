@@ -86,7 +86,16 @@ class _HomePageState extends State<HomePage> {
 
   FloatingActionButton buildFloatingActionButton() => FloatingActionButton(
     onPressed: () {
-      ScriptGenerator.generateScript(tables);
+      var response = ScriptGenerator.tryGenerateScript(tables);
+      if (response == '') {
+         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Successfully generated a script!'),
+        ));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(response),
+        ));
+      }
     },
     child: Constants.generateScriptIcon,
   );

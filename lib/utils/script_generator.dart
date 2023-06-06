@@ -1,8 +1,49 @@
 import '../models/database_table.dart';
 import '../models/column_operations.dart';
+import '../models/data_types.dart';
 
 class ScriptGenerator {
   ScriptGenerator._();
+
+  static const missingColumnOperation = 'Operation must be chosen for each column';
+  static const missingColumnName = 'Columns must have a name';
+  static const missingDataType = 'Data Type must be chosen for each column with the ADD or MODIFY operation';
+  static const missingNewColumnName = 'New Name must be chosen for each column with the MODIFY operation';
+  static const missingDefaultValue = 'Default Value must be chosen for each column with the ADD operation';
+
+  static String tryGenerateScript(List<DatabaseTable> tables) {
+    for (var table in tables) {
+      for (var column in table.columns) {
+        // Check for column operation
+        if (column.columnOperation == ColumnOperations.none) {
+          return missingColumnOperation;
+        }
+        // Check for column name
+        if (column.name == null || column.name!.isEmpty) {
+          return missingColumnName;
+        }
+        // Check if DataType exists for columns with ADD or MODIFY operation
+        if (column.columnOperation == ColumnOperations.add || column.columnOperation == ColumnOperations.modify) {
+          if (column.dataType == DataTypes.none) {
+            return missingDataType;
+          }
+        }
+        // Check for new column name for columns with MODIFY operation
+        if (column.columnOperation == ColumnOperations.modify) {
+          if (column.newName == null || column.newName!.isEmpty) {
+            return missingNewColumnName;
+          }
+        }
+        // Check for default value in ADD operations
+        if (column.columnOperation == ColumnOperations.add) {
+          if (column.value == null || column.value!.isEmpty) {
+            return missingDefaultValue;
+          }
+        }
+      }
+    }
+    return '';
+  }
 
   static void generateScript(List<DatabaseTable> tables) {
     StringBuffer stringBuffer = StringBuffer();
