@@ -225,13 +225,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           buildDataTypesDropdownButton(column),
-          column.dataType != DataTypes.none ? TextField(
-            onChanged: (value) => updateColumnValue(column, value),
-            decoration: const InputDecoration(
-              label: Text(Constants.columnValueLabel),
-              hintText: Constants.columnValueHint,
-            ),
-          ) : const SizedBox()
         ];
       case ColumnOperations.add:
         return [
@@ -243,6 +236,13 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           buildDataTypesDropdownButton(column),
+          column.dataType != DataTypes.none ? TextField(
+            onChanged: (value) => updateColumnValue(column, value),
+            decoration: const InputDecoration(
+              label: Text(Constants.columnValueLabel),
+              hintText: Constants.columnValueHint,
+            ),
+          ) : const SizedBox()
         ];
       case ColumnOperations.remove:
         return [
