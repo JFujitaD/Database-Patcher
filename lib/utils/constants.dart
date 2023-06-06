@@ -14,4 +14,8 @@ class Constants {
 
   static const addColumnIcon = Icon(Icons.add_card_outlined);
   static const removeColumnIcon = Icon(Icons.remove_circle_outline);
+  static const columnNameLabel = 'Name';
+  static const columnNameHint = 'column_name';
+  static const columnNewNameLabel = 'New Name';
+  static const columnNewNameHint = 'new_column_name';
 }

@@ -2,10 +2,8 @@ import './data_types.dart';
 import './column_operations.dart';
 
 class DatabaseColumn {
-  final String name;
+  String? name;
   ColumnOperations columnOperation = ColumnOperations.none;
-  DataTypes? dataType;
+  DataTypes dataType = DataTypes.none;
   String? value;
-
-  DatabaseColumn({required this.name, this.dataType, this.value});
 }

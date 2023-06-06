@@ -5,6 +5,7 @@ import '../dialogs/dialog_builder.dart';
 import '../models/database_table.dart';
 import '../models/database_column.dart';
 import '../models/column_operations.dart';
+import '../models/data_types.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,7 +30,7 @@ class _HomePageState extends State<HomePage> {
 
   void addColumn(DatabaseTable table) {
     setState(() {
-      table.columns.add(DatabaseColumn(name: 'New Column'));
+      table.columns.add(DatabaseColumn());
     });
   }
 
@@ -42,6 +43,12 @@ class _HomePageState extends State<HomePage> {
   void changeColumnOperation(DatabaseColumn column, ColumnOperations columnOperation) {
     setState(() {
       column.columnOperation = columnOperation;
+    });
+  }
+
+  void changeColumnDataType(DatabaseColumn column, DataTypes dataType) {
+    setState(() {
+      column.dataType = dataType;
     });
   }
 
@@ -94,22 +101,22 @@ class _HomePageState extends State<HomePage> {
           child: ExpansionTile(
             leading: Constants.tableIcon,
             title: Text(t.tableName),
-            children: buildExpansionTileChildren(context, t),
+            children: buildExpansionTileChildren(t),
           ),
         );
       },
     );
   }
 
-  List<Card> buildExpansionTileChildren(BuildContext context, DatabaseTable databaseTable) {
+  List<Card> buildExpansionTileChildren(DatabaseTable databaseTable) {
     final List<Card> tileChildren = databaseTable.columns.map(
       (column) => Card(
         child: ListTile(
-          title: Text(column.name),
-          subtitle: Column(
+          title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildColumnOperationDropdownButton(context, column),
+              buildColumnOperationDropdownButton(column),
+              ...buildCustomizedColumn(column),
             ],
           ),
           trailing: IconButton(
@@ -133,7 +140,7 @@ class _HomePageState extends State<HomePage> {
     return tileChildren;
   }
 
-  DropdownButton buildColumnOperationDropdownButton(BuildContext context, DatabaseColumn column) {
+  DropdownButton buildColumnOperationDropdownButton(DatabaseColumn column) {
     return DropdownButton(
       value: column.columnOperation,
       onChanged: (value) {
@@ -158,5 +165,69 @@ class _HomePageState extends State<HomePage> {
         ),
       ],
     );
+  }
+
+  DropdownButton buildDataTypesDropdownButton(DatabaseColumn column) { 
+    return DropdownButton(
+      value: column.dataType,
+      onChanged: (value) {
+        changeColumnDataType(column, value!);
+      },
+      items: const [
+        DropdownMenuItem(
+          value: DataTypes.none,
+          child: Text('Data Type'),
+        ),
+        DropdownMenuItem(
+          value: DataTypes.varchar,
+          child: Text('VARCHAR'),
+        ),
+        DropdownMenuItem(
+          value: DataTypes.number,
+          child: Text('NUMBER'),
+        ),
+      ],
+    );
+  }
+
+  List<Widget> buildCustomizedColumn(DatabaseColumn column) {
+    switch (column.columnOperation) {
+      case ColumnOperations.modify:
+        return [
+          const TextField(
+            decoration: InputDecoration(
+              label: Text(Constants.columnNameLabel),
+              hintText: Constants.columnNameHint,
+            ),
+          ),
+          const TextField(
+            decoration: InputDecoration(
+              label: Text(Constants.columnNewNameLabel),
+              hintText: Constants.columnNewNameHint,
+          ),
+          ),
+          buildDataTypesDropdownButton(column),
+        ];
+      case ColumnOperations.add:
+        return [
+          const TextField(
+            decoration: InputDecoration(
+              label: Text(Constants.columnNameLabel),
+              hintText: Constants.columnNameHint,
+            ),
+          ),
+          buildDataTypesDropdownButton(column),
+        ];
+      case ColumnOperations.remove:
+        return [
+          const TextField(
+            decoration: InputDecoration(
+              label: Text(Constants.columnNameLabel),
+              hintText: Constants.columnNameHint,
+            ),
+          )
+        ];
+      default: return [];
+    }
   }
 }
