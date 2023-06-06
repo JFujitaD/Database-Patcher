@@ -7,8 +7,6 @@ class Constants {
 
   static const addTableTitle = 'New Table';
   static const tableIcon = Icon(Icons.table_bar_outlined);
-  static const addTableIcon = Icon(Icons.add_chart);
-  static const emptyTablesText = 'Add a new table using the floating action button';
   static const tableHintText = 'my_table';
   static const tableLabel = 'Table Name';
 
@@ -20,4 +18,6 @@ class Constants {
   static const columnNewNameHint = 'new_column_name';
   static const columnValueLabel = 'Default Value';
   static const columnValueHint = 'default_value';
+
+  static const generateScriptIcon = Icon(Icons.generating_tokens_outlined);
 }

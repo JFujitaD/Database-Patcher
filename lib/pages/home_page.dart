@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../utils/constants.dart';
+import '../utils/script_generator.dart';
 import '../dialogs/dialog_builder.dart';
 import '../models/database_table.dart';
 import '../models/database_column.dart';
@@ -85,29 +86,32 @@ class _HomePageState extends State<HomePage> {
 
   FloatingActionButton buildFloatingActionButton() => FloatingActionButton(
     onPressed: () {
-      showDialog(
-        context: context,
-        builder: (context) => DialogBuilder.addTableDialog(
-          context,
-          formKey,
-          tableTextEditingController,
-        ),
-      ).then((newTable) => addTable(newTable));
+      ScriptGenerator.generateScript(tables);
     },
-    child: Constants.addTableIcon,
+    child: Constants.generateScriptIcon,
   );
 
   Widget buildListView(BuildContext context) {
     final itemCount = tables.length;
-
-    if (itemCount == 0) {
-      return const Center(
-        child: Text(Constants.emptyTablesText),
-      );
-    }
     return ListView.builder(
-      itemCount: itemCount,
+      itemCount: itemCount + 1,
       itemBuilder: (context, index) {
+        if (index >= tables.length) {
+          return ElevatedButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => DialogBuilder.addTableDialog(
+                  context,
+                  formKey,
+                  tableTextEditingController,
+                ),
+              ).then((newTable) => addTable(newTable));
+            },
+            child: const Text('Add New Table'),
+          );
+        }
+
         final t = tables[index];
         return Card(
           child: ExpansionTile(
