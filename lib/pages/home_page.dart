@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBarBuilder.buildAppBar(),
       floatingActionButton: buildFloatingActionButton(),
-      body: buildListView(context),
+      body: buildListView(),
     );
   }
 
@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
     child: Constants.generateScriptIcon,
   );
 
-  Widget buildListView(BuildContext context) {
+  Widget buildListView() {
     final itemCount = tables.length;
     return ListView.builder(
       itemCount: itemCount + 1,
