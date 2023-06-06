@@ -13,4 +13,5 @@ class Constants {
   static const tableLabel = 'Table Name';
 
   static const addColumnIcon = Icon(Icons.add_card_outlined);
+  static const removeColumnIcon = Icon(Icons.remove_circle_outline);
 }

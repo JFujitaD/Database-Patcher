@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../utils/constants.dart';
 import '../dialogs/dialog_builder.dart';
 import '../models/database_table.dart';
+import '../models/database_column.dart';
+import '../models/column_operations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,9 +21,27 @@ class _HomePageState extends State<HomePage> {
     DatabaseTable(name: 'Missions'),
   ];
 
-  void updateTable(DatabaseTable newTable) {
+  void addTable(DatabaseTable newTable) {
     setState(() {
       tables.add(newTable);
+    });
+  }
+
+  void addColumn(DatabaseTable table) {
+    setState(() {
+      table.columns.add(DatabaseColumn(name: 'New Column'));
+    });
+  }
+
+  void removeColumn(DatabaseTable table, DatabaseColumn column) {
+    setState(() {
+      table.columns.remove(column);
+    });
+  }
+
+  void changeColumnOperation(DatabaseColumn column, ColumnOperations columnOperation) {
+    setState(() {
+      column.columnOperation = columnOperation;
     });
   }
 
@@ -53,7 +73,7 @@ class _HomePageState extends State<HomePage> {
           formKey,
           tableTextEditingController,
         ),
-      ).then((newTable) => updateTable(newTable));
+      ).then((newTable) => addTable(newTable));
     },
     child: Constants.addTableIcon,
   );
@@ -83,17 +103,60 @@ class _HomePageState extends State<HomePage> {
 
   List<Card> buildExpansionTileChildren(BuildContext context, DatabaseTable databaseTable) {
     final List<Card> tileChildren = databaseTable.columns.map(
-      (column) => const Card(
+      (column) => Card(
         child: ListTile(
-          title: Text('TEST'),
+          title: Text(column.name),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              buildColumnOperationDropdownButton(context, column),
+            ],
+          ),
+          trailing: IconButton(
+            icon: Constants.removeColumnIcon,
+            onPressed: () {
+              removeColumn(databaseTable, column);
+            },
+          ),
         ),
       )
     ).toList();
 
-    tileChildren.add(const Card(
-      child: Constants.addColumnIcon,
+    tileChildren.add(Card(
+      child: IconButton(
+        onPressed: () {
+          addColumn(databaseTable);
+        },
+        icon: Constants.addColumnIcon)
     ));
 
     return tileChildren;
+  }
+
+  DropdownButton buildColumnOperationDropdownButton(BuildContext context, DatabaseColumn column) {
+    return DropdownButton(
+      value: column.columnOperation,
+      onChanged: (value) {
+        changeColumnOperation(column, value);
+      },
+      items: const [
+        DropdownMenuItem(
+          value: ColumnOperations.none,
+          child: Text('Operation'),
+        ),
+        DropdownMenuItem(
+          value: ColumnOperations.add,
+          child: Text('ADD'),
+        ),
+        DropdownMenuItem(
+          value: ColumnOperations.remove,
+          child: Text('REMOVE'),
+        ),
+        DropdownMenuItem(
+          value: ColumnOperations.modify,
+          child: Text('MODIFY'),
+        ),
+      ],
+    );
   }
 }
