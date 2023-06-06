@@ -1,0 +1,4 @@
+enum DataTypes {
+  varchar,
+  number,
+}
