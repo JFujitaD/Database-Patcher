@@ -10,9 +10,15 @@ class ScriptGenerator {
   static const missingDataType = 'Data Type must be chosen for each column with the ADD or MODIFY operation';
   static const missingNewColumnName = 'New Name must be chosen for each column with the MODIFY operation';
   static const missingDefaultValue = 'Default Value must be chosen for each column with the ADD operation';
+  static const missingColumns = 'There must be at least one column per table';
 
   static String tryGenerateScript(List<DatabaseTable> tables) {
     for (var table in tables) {
+      // Check for at least one column in table
+      if (table.columns.isEmpty) {
+        return missingColumns;
+      }
+
       for (var column in table.columns) {
         // Check for column operation
         if (column.columnOperation == ColumnOperations.none) {
@@ -45,7 +51,7 @@ class ScriptGenerator {
     return '';
   }
 
-  static void generateScript(List<DatabaseTable> tables) {
+  static String generateScript(List<DatabaseTable> tables) {
     StringBuffer stringBuffer = StringBuffer();
 
     for(var table in tables) {
@@ -73,6 +79,6 @@ class ScriptGenerator {
       }
     }
 
-    print(stringBuffer.toString());
+    return stringBuffer.toString();
   }
 }

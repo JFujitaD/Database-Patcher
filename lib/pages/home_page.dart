@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../utils/constants.dart';
 import '../utils/script_generator.dart';
-import '../dialogs/dialog_builder.dart';
+import '../components/dialog_builder.dart';
 import '../models/database_table.dart';
 import '../models/database_column.dart';
 import '../models/column_operations.dart';
 import '../models/data_types.dart';
+import '../pages/script_page.dart';
+import '../components/app_bar_builder.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,7 +22,6 @@ class _HomePageState extends State<HomePage> {
   final tableTextEditingController = TextEditingController();
   List<DatabaseTable> tables = [
     DatabaseTable(name: 'Entries'),
-    DatabaseTable(name: 'Missions'),
   ];
 
   void addTable(DatabaseTable newTable) {
@@ -74,22 +75,19 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: AppBarBuilder.buildAppBar(),
       floatingActionButton: buildFloatingActionButton(),
       body: buildListView(context),
     );
   }
 
-  AppBar buildAppBar() => AppBar(
-    title: const Text(Constants.appName),
-  );
-
   FloatingActionButton buildFloatingActionButton() => FloatingActionButton(
     onPressed: () {
       var response = ScriptGenerator.tryGenerateScript(tables);
       if (response == '') {
-         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Successfully generated a script!'),
+        String script = ScriptGenerator.generateScript(tables);
+        Navigator.of(context).push(MaterialPageRoute(
+          builder:(context) => ScriptPage(script: script,),
         ));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
