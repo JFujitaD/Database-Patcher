@@ -122,6 +122,7 @@ class _HomePageState extends State<HomePage> {
         final t = tables[index];
         return Card(
           child: ExpansionTile(
+            onExpansionChanged: (value) => setState(() {}),
             leading: Constants.tableIcon,
             title: Text(t.tableName),
             children: buildExpansionTileChildren(t),
@@ -217,14 +218,16 @@ class _HomePageState extends State<HomePage> {
     switch (column.columnOperation) {
       case ColumnOperations.modify:
         return [
-          TextField(
+          TextFormField(
+            initialValue: column.name ?? '',
             onChanged: (value) => updateColumnName(column, value),
             decoration: const InputDecoration(
               label: Text(Constants.columnNameLabel),
               hintText: Constants.columnNameHint,
             ),
           ),
-          TextField(
+          TextFormField(
+            initialValue: column.newName ?? '',
             onChanged: (value) => updateNewColumnName(column, value),
             decoration: const InputDecoration(
               label: Text(Constants.columnNewNameLabel),
@@ -235,7 +238,8 @@ class _HomePageState extends State<HomePage> {
         ];
       case ColumnOperations.add:
         return [
-          TextField(
+          TextFormField(
+            initialValue: column.name ?? '',
             onChanged: (value) => updateColumnName(column, value),
             decoration: const InputDecoration(
               label: Text(Constants.columnNameLabel),
@@ -243,7 +247,8 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           buildDataTypesDropdownButton(column),
-          column.dataType != DataTypes.none ? TextField(
+          column.dataType != DataTypes.none ? TextFormField(
+            initialValue: column.value ?? '',
             onChanged: (value) => updateColumnValue(column, value),
             decoration: const InputDecoration(
               label: Text(Constants.columnValueLabel),
@@ -253,7 +258,8 @@ class _HomePageState extends State<HomePage> {
         ];
       case ColumnOperations.remove:
         return [
-          TextField(
+          TextFormField(
+            initialValue: column.name ?? '',
             onChanged: (value) => updateColumnName(column, value),
             decoration: const InputDecoration(
               label: Text(Constants.columnNameLabel),
