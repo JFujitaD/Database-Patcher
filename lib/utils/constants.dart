@@ -19,5 +19,5 @@ class Constants {
   static const columnValueLabel = 'Default Value';
   static const columnValueHint = 'default_value';
 
-  static const generateScriptIcon = Icon(Icons.generating_tokens_outlined);
+  static const generateScriptIcon = Icon(Icons.create_outlined);
 }

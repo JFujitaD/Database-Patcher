@@ -9,6 +9,7 @@ import '../models/column_operations.dart';
 import '../models/data_types.dart';
 import '../pages/script_page.dart';
 import '../components/app_bar_builder.dart';
+import '../utils/app_theme.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -164,53 +165,63 @@ class _HomePageState extends State<HomePage> {
     return tileChildren;
   }
 
-  DropdownButton buildColumnOperationDropdownButton(DatabaseColumn column) {
-    return DropdownButton(
-      value: column.columnOperation,
-      onChanged: (value) {
-        changeColumnOperation(column, value);
-      },
-      items: const [
-        DropdownMenuItem(
-          value: ColumnOperations.none,
-          child: Text('Operation'),
-        ),
-        DropdownMenuItem(
-          value: ColumnOperations.add,
-          child: Text('ADD'),
-        ),
-        DropdownMenuItem(
-          value: ColumnOperations.remove,
-          child: Text('REMOVE'),
-        ),
-        DropdownMenuItem(
-          value: ColumnOperations.modify,
-          child: Text('MODIFY'),
-        ),
-      ],
+  Theme buildColumnOperationDropdownButton(DatabaseColumn column) {
+    return Theme(
+      data: Theme.of(context).copyWith(
+        canvasColor: AppTheme.white
+      ),
+      child: DropdownButton(
+        value: column.columnOperation,
+        onChanged: (value) {
+          changeColumnOperation(column, value!);
+        },
+        items: const [
+          DropdownMenuItem(
+            value: ColumnOperations.none,
+            child: Text('Operation'),
+          ),
+          DropdownMenuItem(
+            value: ColumnOperations.add,
+            child: Text('ADD'),
+          ),
+          DropdownMenuItem(
+            value: ColumnOperations.remove,
+            child: Text('REMOVE'),
+          ),
+          DropdownMenuItem(
+            value: ColumnOperations.modify,
+            child: Text('MODIFY'),
+          ),
+        ],
+      ),
     );
   }
 
-  DropdownButton buildDataTypesDropdownButton(DatabaseColumn column) { 
-    return DropdownButton(
-      value: column.dataType,
-      onChanged: (value) {
-        changeColumnDataType(column, value!);
-      },
-      items: const [
-        DropdownMenuItem(
-          value: DataTypes.none,
-          child: Text('Data Type'),
-        ),
-        DropdownMenuItem(
-          value: DataTypes.varchar,
-          child: Text('VARCHAR'),
-        ),
-        DropdownMenuItem(
-          value: DataTypes.number,
-          child: Text('NUMBER'),
-        ),
-      ],
+  Theme buildDataTypesDropdownButton(DatabaseColumn column) { 
+    return Theme(
+       data: Theme.of(context).copyWith(
+        canvasColor: AppTheme.white
+      ),
+      child: DropdownButton(
+        value: column.dataType,
+        onChanged: (value) {
+          changeColumnDataType(column, value!);
+        },
+        items: const [
+          DropdownMenuItem(
+            value: DataTypes.none,
+            child: Text('Data Type'),
+          ),
+          DropdownMenuItem(
+            value: DataTypes.varchar,
+            child: Text('VARCHAR'),
+          ),
+          DropdownMenuItem(
+            value: DataTypes.number,
+            child: Text('NUMBER'),
+          ),
+        ],
+      ),
     );
   }
 

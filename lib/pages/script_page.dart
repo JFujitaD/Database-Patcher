@@ -11,7 +11,9 @@ class ScriptPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarBuilder.buildAppBar(),
-      body: Text(script),
+      body: Card(
+        child: Text(script),
+      ),
     );
   }
 }
