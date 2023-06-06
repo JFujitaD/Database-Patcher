@@ -11,8 +11,14 @@ class ScriptGenerator {
   static const missingNewColumnName = 'New Name must be chosen for each column with the MODIFY operation';
   static const missingDefaultValue = 'Default Value must be chosen for each column with the ADD operation';
   static const missingColumns = 'There must be at least one column per table';
+  static const missingTables = 'There must be at least one table';
 
   static String tryGenerateScript(List<DatabaseTable> tables) {
+    // Check for at least one table
+    if (tables.isEmpty) {
+      return missingTables;
+    }
+
     for (var table in tables) {
       // Check for at least one column in table
       if (table.columns.isEmpty) {
@@ -61,7 +67,11 @@ class ScriptGenerator {
           case ColumnOperations.add:
             stringBuffer.write('ADD ${column.name} ${column.dataType.name.toUpperCase()};\n\n');
             stringBuffer.write('UPDATE ${table.name}\n');
-            stringBuffer.write('SET ${column.name} = ${column.value};\n');
+            if (column.dataType == DataTypes.varchar) {
+              stringBuffer.write('SET ${column.name} = \'${column.value}\';\n');
+            } else {
+              stringBuffer.write('SET ${column.name} = ${column.value};\n');
+            }
             break;
           case ColumnOperations.remove:
             stringBuffer.write('DROP COLUMN IF EXISTS ${column.name};\n');

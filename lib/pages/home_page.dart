@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   final formKey = GlobalKey<FormState>();
   final tableTextEditingController = TextEditingController();
   List<DatabaseTable> tables = [
-    DatabaseTable(name: 'Entries'),
+    // DatabaseTable(name: 'Entries'),
   ];
 
   void addTable(DatabaseTable newTable) {
