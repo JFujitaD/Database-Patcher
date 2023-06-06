@@ -18,4 +18,6 @@ class Constants {
   static const columnNameHint = 'column_name';
   static const columnNewNameLabel = 'New Name';
   static const columnNewNameHint = 'new_column_name';
+  static const columnValueLabel = 'Default Value';
+  static const columnValueHint = 'default_value';
 }

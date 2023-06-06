@@ -52,6 +52,18 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void updateColumnName(DatabaseColumn column, String columnName) {
+    column.name = columnName;
+  }
+
+  void updateColumnValue(DatabaseColumn column, String value) {
+    column.value = value;
+  }
+
+  void updateNewColumnName(DatabaseColumn column, String newColumnName) {
+    column.newName = newColumnName;
+  }
+
   @override
   void dispose() { 
     super.dispose();
@@ -194,24 +206,34 @@ class _HomePageState extends State<HomePage> {
     switch (column.columnOperation) {
       case ColumnOperations.modify:
         return [
-          const TextField(
-            decoration: InputDecoration(
+          TextField(
+            onChanged: (value) => updateColumnName(column, value),
+            decoration: const InputDecoration(
               label: Text(Constants.columnNameLabel),
               hintText: Constants.columnNameHint,
             ),
           ),
-          const TextField(
-            decoration: InputDecoration(
+          TextField(
+            onChanged: (value) => updateNewColumnName(column, value),
+            decoration: const InputDecoration(
               label: Text(Constants.columnNewNameLabel),
               hintText: Constants.columnNewNameHint,
-          ),
+            ),
           ),
           buildDataTypesDropdownButton(column),
+          column.dataType != DataTypes.none ? TextField(
+            onChanged: (value) => updateColumnValue(column, value),
+            decoration: const InputDecoration(
+              label: Text(Constants.columnValueLabel),
+              hintText: Constants.columnValueHint,
+            ),
+          ) : const SizedBox()
         ];
       case ColumnOperations.add:
         return [
-          const TextField(
-            decoration: InputDecoration(
+          TextField(
+            onChanged: (value) => updateColumnName(column, value),
+            decoration: const InputDecoration(
               label: Text(Constants.columnNameLabel),
               hintText: Constants.columnNameHint,
             ),
@@ -220,8 +242,9 @@ class _HomePageState extends State<HomePage> {
         ];
       case ColumnOperations.remove:
         return [
-          const TextField(
-            decoration: InputDecoration(
+          TextField(
+            onChanged: (value) => updateColumnName(column, value),
+            decoration: const InputDecoration(
               label: Text(Constants.columnNameLabel),
               hintText: Constants.columnNameHint,
             ),
