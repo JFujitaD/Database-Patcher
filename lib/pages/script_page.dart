@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../components/app_bar_builder.dart';
+import '../utils/constants.dart';
 
 class ScriptPage extends StatelessWidget {
   final String script;
@@ -11,8 +12,13 @@ class ScriptPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarBuilder.buildAppBar(),
-      body: Card(
-        child: Text(script),
+      body: Center(
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(Constants.cardPadding),
+            child: Expanded(child: Text(script)),
+          ),
+        ),
       ),
     );
   }

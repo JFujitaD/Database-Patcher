@@ -19,5 +19,9 @@ class Constants {
   static const columnValueLabel = 'Default Value';
   static const columnValueHint = 'default_value';
 
+  static const spacingVertical = 16.0;
+  static const spacingHorizontal = 32.0;
+  static const cardPadding = 8.0;
+
   static const generateScriptIcon = Icon(Icons.create_outlined);
 }

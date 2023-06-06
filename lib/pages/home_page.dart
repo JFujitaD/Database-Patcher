@@ -105,18 +105,21 @@ class _HomePageState extends State<HomePage> {
       itemCount: itemCount + 1,
       itemBuilder: (context, index) {
         if (index >= tables.length) {
-          return ElevatedButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => DialogBuilder.addTableDialog(
-                  context,
-                  formKey,
-                  tableTextEditingController,
-                ),
-              ).then((newTable) => addTable(newTable));
-            },
-            child: const Text('Add New Table'),
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: Constants.spacingVertical, horizontal: Constants.spacingHorizontal),
+            child: ElevatedButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => DialogBuilder.addTableDialog(
+                    context,
+                    formKey,
+                    tableTextEditingController,
+                  ),
+                ).then((newTable) => addTable(newTable));
+              },
+              child: const Text('Add New Table'),
+            ),
           );
         }
 
@@ -133,27 +136,32 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Card> buildExpansionTileChildren(DatabaseTable databaseTable) {
-    final List<Card> tileChildren = databaseTable.columns.map(
+  List<Widget> buildExpansionTileChildren(DatabaseTable databaseTable) {
+    final List<Widget> tileChildren = databaseTable.columns.map<Widget>(
       (column) => Card(
-        child: ListTile(
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildColumnOperationDropdownButton(column),
-              ...buildCustomizedColumn(column),
-            ],
-          ),
-          trailing: IconButton(
-            icon: Constants.removeColumnIcon,
-            onPressed: () {
-              removeColumn(databaseTable, column);
-            },
+        child: Padding(
+          padding: const EdgeInsets.all(Constants.cardPadding),
+          child: ListTile(
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                buildColumnOperationDropdownButton(column),
+                const SizedBox(height: Constants.spacingVertical),
+                ...buildCustomizedColumn(column),
+              ],
+            ),
+            trailing: IconButton(
+              icon: Constants.removeColumnIcon,
+              onPressed: () {
+                removeColumn(databaseTable, column);
+              },
+            ),
           ),
         ),
       )
     ).toList();
 
+    tileChildren.add(const SizedBox(height: Constants.spacingVertical,));
     tileChildren.add(Card(
       child: IconButton(
         onPressed: () {
@@ -161,6 +169,7 @@ class _HomePageState extends State<HomePage> {
         },
         icon: Constants.addColumnIcon)
     ));
+    tileChildren.add(const SizedBox(height: Constants.spacingVertical,));
 
     return tileChildren;
   }
@@ -237,6 +246,7 @@ class _HomePageState extends State<HomePage> {
               hintText: Constants.columnNameHint,
             ),
           ),
+          const SizedBox(height: Constants.spacingVertical,),
           TextFormField(
             initialValue: column.newName ?? '',
             onChanged: (value) => updateNewColumnName(column, value),
@@ -245,6 +255,7 @@ class _HomePageState extends State<HomePage> {
               hintText: Constants.columnNewNameHint,
             ),
           ),
+          const SizedBox(height: Constants.spacingVertical,),
           buildDataTypesDropdownButton(column),
         ];
       case ColumnOperations.add:
@@ -257,7 +268,9 @@ class _HomePageState extends State<HomePage> {
               hintText: Constants.columnNameHint,
             ),
           ),
+          const SizedBox(height: Constants.spacingVertical,),
           buildDataTypesDropdownButton(column),
+          const SizedBox(height: Constants.spacingVertical,),
           column.dataType != DataTypes.none ? TextFormField(
             initialValue: column.value ?? '',
             onChanged: (value) => updateColumnValue(column, value),
